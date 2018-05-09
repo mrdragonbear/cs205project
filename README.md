@@ -69,7 +69,7 @@ The AMI is essentially a template that allows us to create new instances that ha
 The first step was to create 20 copied instances and have them download different models. To send commands between instances, we needed to configure the AWS Identity and Access Management (IAM) policy, detailed here. The IAM policy provided full read/write access to S3 and full access to SSM; this set of policies was added to each instance after instantiation. Once the models finished downloading on each instance, the NetCDF files were converted to zarr folders and then processed in the Python code detailed above. Results from the code for each model were stored on a public S3 bucket, available from this link. These results can be replicated by accessing the public image through US West (Oregon) using the AMI ID ami-f1334289. The data flow and infrastructure setup is shown graphically in Figure 3.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig3.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig3.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 3</b> – Illustration of the dataflow and infrastructure setup used in this project.
