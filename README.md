@@ -8,12 +8,10 @@ Global warming has been one of the hottest topics in environmental science for t
 
 
 <p align="center">
-  
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig1.png" width="600" alt="SERIAL"/>
-  
-  <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
 
-<p>
+<p align="center">
+  <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
 
 <p align="justify">
 From Figure 1, it is clear that the models correlate well with observations from 1960 to 2000. However, from 2000 we start to see observational estimates plateau while the model estimates continue to increase. Although this deviation is well known, it is not well understood. The aim of this project is two-fold: (1) to compare temperature estimates from 21 CMIP5 models with observations from NASA GISS (GISSTEMP, 2018) and (2) to create a public framework that can be re-used by researchers to test their climate models for comparison. For the purposes of this class, we will focus more on the latter than the former because that is where the parallel implementation comes into play.
@@ -39,6 +37,8 @@ As Spark has difficulties handling NetCDF files, a state-of-the-art Python packa
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig2.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 2</b> - Summary of Software Packages
 
 <p align="justify">
@@ -49,6 +49,8 @@ For the data analysis, we divided the Python code into six sections. The first l
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Table1.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Table 1</b> – The essential packages that were installed for the Python code.
 
 
@@ -68,6 +70,8 @@ The first step was to create 20 copied instances and have them download differen
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig3.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 3</b> – Illustration of the dataflow and infrastructure setup used in this project.
 
 ## 3. Results
@@ -79,6 +83,8 @@ As noted earlier, we changed the files from NetCDF to Zarr to reduce the IOPS in
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig4.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 4</b> – Time to load NetCDF and Zarr files on a local machine (3.1 GHz Intel Core i5 MacBook Pro) and t2.2xlarge AWS instance. Note the logarithmic scale for the y-axis.
 
 <p align="justify">
@@ -89,6 +95,8 @@ After converting the NetCDFs to Zarrs, we performed strong and weak scalings bas
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig5.png" width="600" alt="SERIAL"/>
+
+<p align="center">
   <b>Figure 5</b> – Speedup plots of the Dask parallelized sections for (a) strong and (b) weak scalings.
 
 <p align="justify">
@@ -101,6 +109,8 @@ Due to large selection of instances available on AWS, it is important to determi
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Table2.png" width="600" alt="SERIAL"/>
+
+<p align="center">
   <b>Table 2</b> – Cost-performance analysis of 20 instances processing the model data.
 
 <p align="justify">
@@ -113,6 +123,8 @@ Here we include results derived from the Python script. Figure 6 shows the diffe
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig6.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 6 </b>– Difference in anomaly slopes between observations and (a) CEM1-BCG and (b) inmcm4. 
 
 <p align="justify">
@@ -120,6 +132,8 @@ Figure 7 shows the PCA on the observations and two models. The model examples sh
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig7.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 7</b> – EOF plots for the first three PCAs over the period 1990-2015 for (a) the observations, (b) MIROC-ESM-CHEM and (c) CSIRO-Mk3-6-0.
 
 <p align="justify">
@@ -143,6 +157,8 @@ Rough estimates based on data from this paper reveal that sequential execution t
 
 <p align="center">
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig8.png" width="600" alt="SERIAL"/>
+  
+<p align="center">
   <b>Figure 8</b> - Software implementation for exascale climate data computation.
 
 <p align="justify">
