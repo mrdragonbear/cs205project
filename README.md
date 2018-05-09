@@ -10,6 +10,7 @@ Global warming has been one of the hottest topics in environmental science for t
 <p align="center">
   
   <img src="https://github.com/ebonil01/cs205project/blob/master/Fig1.png" width="600" alt="SERIAL"/>
+  
   <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
 
 <p align="justify">
