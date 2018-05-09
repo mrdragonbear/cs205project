@@ -36,7 +36,7 @@ The parallelization of our project was conducted in two phases. First we paralle
 As Spark has difficulties handling NetCDF files, a state-of-the-art Python package that was released in early 2018, known as Dask, was used instead in order to manipulate the datasets. Dask contains its own OpenMP-style shared-memory parallelism, which was applied to the data to minimize computation time. This was coupled with another package, Xarray, which is a multidimensional implementation of Pandas developed for large datasets. Setting up a distributed cluster using Dask was abandoned due to time constraints and lack of knowledge of implementing this using Kubernetes and Helm – the most common way of implementing a distributed cluster on Dask. AWS was chosen for the infrastructure used for computation of the models, and interacted with the public dataset and instances via the AWS command line interface (CLI). Below (Figure 2), shows the summary of the software packages utilized in the computing framework.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig2.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig2.png" width="800" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 2</b> - Summary of Software Packages
@@ -94,7 +94,7 @@ There is a significant reduction in loading time when using Zarr files instead o
 After converting the NetCDFs to Zarrs, we performed strong and weak scalings based on our Python code. Results are displayed in Figures 5(a) and (b).
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig5.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig5.png" width="900" alt="SERIAL"/>
 
 <p align="center">
   <b>Figure 5</b> – Speedup plots of the Dask parallelized sections for (a) strong and (b) weak scalings.
@@ -122,7 +122,7 @@ The optimal choice of instance depends on the most essential criteria for the us
 Here we include results derived from the Python script. Figure 6 shows the difference in anomaly slopes (observations – models) for two example cases. Figure 6(a) shows the model that deviates the least from the observations and Figure 6(b) shows the model that had the greatest deviations. This difference is particularly notable in the Arctic. We see that the observations and CEM1-BCG largely agree, while the observations and immcm4 do not.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig6.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig6.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 6 </b>– Difference in anomaly slopes between observations and (a) CEM1-BCG and (b) inmcm4. 
@@ -131,7 +131,7 @@ Here we include results derived from the Python script. Figure 6 shows the diffe
 Figure 7 shows the PCA on the observations and two models. The model examples shown on this figure are the ones that seemed the most and least similar to the patterns found by the first three principal components (PCs)  on the observation data. The PCs for the observations are on figure 7 (a), the most similar by model are on figure 7(b), and the least similar on figure 7 (c).  
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig7.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig7.png" width="800" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 7</b> – EOF plots for the first three PCAs over the period 1990-2015 for (a) the observations, (b) MIROC-ESM-CHEM and (c) CSIRO-Mk3-6-0.
@@ -156,7 +156,7 @@ It is expected in the coming years and decades that environmental datasets invol
 Rough estimates based on data from this paper reveal that sequential execution time for computation of petabyte- and exabyte- scale datasets would require 2 years and 1500 years respectively. This is clearly not realistic, and requires extensive parallelism to make this computationally tractable. One method proposed to make this more tractable is to continue to use AWS SSM to separate different models, which can then be computed in their own distributed-cluster, such as the StarCluster, a distributed-cluster based on Mpi4py developed by MIT. Within this cluster, anywhere from two to a hundred nodes could be used to aid in this computation, with no communication overhead since this is an embarrassingly parallel problem. Additional parallelism could be implemented within each cluster by using instances which are able to utilize accelerated computing, such as g-type instances running PyAcc. Such an implementation is shown in Figure 8.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig8.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/Fig8.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 8</b> - Software implementation for exascale climate data computation.
