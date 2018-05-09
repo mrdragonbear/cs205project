@@ -1,6 +1,4 @@
-# cs205project
-Final Project for CS205
-Intercomparison of historical temperature anomalies in climate models
+# Intercomparison of Historical Temperature Anomalies in Climate Models
 
 By Eimy Bonilla, Peter Sherman, and Matthew Stewart
 
