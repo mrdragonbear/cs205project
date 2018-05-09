@@ -3,7 +3,7 @@
 By Eimy Bonilla, Peter Sherman, and Matthew Stewart
 
 ## 1. Introduction
-
+<p align="center">
 Global warming has been one of the hottest topics in environmental science for the past few decades. While many individuals and organizations have invested considerable time and resources into studying global warming, there are still some major discrepancies on the topic. One of the most profound of these discrepancies is the disagreement of estimates for global surface temperature anomalies between climate models and observations, which is shown in Figure 1. 
 
 
@@ -134,4 +134,5 @@ Taylor, K.E., Stouffer, R.J., Meehl, G.A. (2012). An Overview of CMIP5 and the e
 
 Zhuang, J., 2018. Dask Examples. Accessed 2018-04-15 at http://cloud-gc.readthedocs.io/en/latest/chapter04_developer-guide/install-basic.html
 
+</p>
 
