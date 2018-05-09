@@ -33,7 +33,7 @@ The parallelization of our project was conducted in two phases. First we paralle
 As Spark has difficulties handling NetCDF files, a state-of-the-art Python package that was released in early 2018, known as Dask, was used instead in order to manipulate the datasets. Dask contains its own OpenMP-style shared-memory parallelism, which was applied to the data to minimize computation time. This was coupled with another package, Xarray, which is a multidimensional implementation of Pandas developed for large datasets. Setting up a distributed cluster using Dask was abandoned due to time constraints and lack of knowledge of implementing this using Kubernetes and Helm – the most common way of implementing a distributed cluster on Dask. AWS was chosen for the infrastructure used for computation of the models, and interacted with the public dataset and instances via the AWS command line interface (CLI). Below (Figure 2), shows the summary of the software packages utilized in the computing framework.
 
 <p align="center">
-Figure 2 - Summary of Software Packages
+  <b>Figure 2</b> - Summary of Software Packages
 
 <p align="justify">
 One of the major challenges that was encountered was reading the NetCDF files into memory. Initially, the program was run on a NetCDF file, which took approximately 5 minutes to load each file. These files are also extremely large and took up a huge amount of disk space. As it was not the goal of this project to deal with this I/O issue, the files were downloaded and then autonomously converted to Zarr files, a more efficient data storage format. Once the Zarr files had been setup, each of the file computations was completed in less than 10 seconds and data reading and writing was in the realm of milliseconds.
