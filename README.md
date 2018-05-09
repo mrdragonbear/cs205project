@@ -8,7 +8,7 @@ Global warming has been one of the hottest topics in environmental science for t
 
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig1.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig1.png" width="600" alt="SERIAL"/>
 
 <p align="center">
   <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
@@ -36,7 +36,7 @@ The parallelization of our project was conducted in two phases. First we paralle
 As Spark has difficulties handling NetCDF files, a state-of-the-art Python package that was released in early 2018, known as Dask, was used instead in order to manipulate the datasets. Dask contains its own OpenMP-style shared-memory parallelism, which was applied to the data to minimize computation time. This was coupled with another package, Xarray, which is a multidimensional implementation of Pandas developed for large datasets. Setting up a distributed cluster using Dask was abandoned due to time constraints and lack of knowledge of implementing this using Kubernetes and Helm – the most common way of implementing a distributed cluster on Dask. AWS was chosen for the infrastructure used for computation of the models, and interacted with the public dataset and instances via the AWS command line interface (CLI). Below (Figure 2), shows the summary of the software packages utilized in the computing framework.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig2.png" width="800" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig2.png" width="800" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 2</b> - Summary of Software Packages
@@ -48,7 +48,7 @@ One of the major challenges that was encountered was reading the NetCDF files in
 For the data analysis, we divided the Python code into six sections. The first loaded the observational data and used a linear regression to compute the slope (in ˚C months-1) for each latitude and longitude over the period 1990-2015. The second and third sections loaded the model data and computed the spatial monthly means and standard deviations, which were used to calculate the model slopes over the period 1990-2015 to be compared with the observations. Section five performed a principal component analysis (PCA) on the model anomalies from 1990-2015. Finally, section six computed the difference in slopes between the observations and models. The Python packages required to run this file are shown in Table 1 below.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Table1.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Table1.png" width="600" alt="SERIAL"/>
   
 <p align="center">
   <b>Table 1</b> – The essential packages that were installed for the Python code.
@@ -69,7 +69,7 @@ The AMI is essentially a template that allows us to create new instances that ha
 The first step was to create 20 copied instances and have them download different models. To send commands between instances, we needed to configure the AWS Identity and Access Management (IAM) policy (https://protechgurus.com/working-amazon-ec2-run-command-ssm-agent/). The IAM policy provided full read/write access to S3 and full access to SSM; this set of policies was added to each instance after instantiation. Once the models finished downloading on each instance, the NetCDF files were converted to zarr folders and then processed in the Python code detailed above. Results from the code for each model were stored on a public S3 bucket, available (https://s3.console.aws.amazon.com/s3/buckets/cs205project-files-group7/?region=us-east-1&tab=overview). These results can be replicated by accessing the public image through US West (Oregon) using the AMI ID <b>ami-f1334289</b>. The data flow and infrastructure setup is shown graphically in Figure 3.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig3.png" width="700" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig3.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 3</b> – Illustration of the dataflow and infrastructure setup used in this project.
@@ -82,7 +82,7 @@ The first step was to create 20 copied instances and have them download differen
 As noted earlier, we changed the files from NetCDF to Zarr to reduce the IOPS in reading and writing data. The speedup from this conversion is negligible on a local machine (from microseconds to milliseconds), but significant on an AWS instance, as seen on Figure 4.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig4.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig4.png" width="600" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 4</b> – Time to load NetCDF and Zarr files on a local machine (3.1 GHz Intel Core i5 MacBook Pro) and t2.2xlarge AWS instance. Note the logarithmic scale for the y-axis.
@@ -94,7 +94,7 @@ There is a significant reduction in loading time when using Zarr files instead o
 After converting the NetCDFs to Zarrs, we performed strong and weak scalings based on our Python code. Results are displayed in Figures 5(a) and (b).
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig5.png" width="900" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig5.png" width="900" alt="SERIAL"/>
 
 <p align="center">
   <b>Figure 5</b> – Speedup plots of the Dask parallelized sections for (a) strong and (b) weak scalings.
@@ -108,7 +108,7 @@ We see that there is little discrepancy between threaded and multiprocessing sch
 Due to large selection of instances available on AWS, it is important to determine the best instance to utilize for a specific task. For an amateur AWS user, selecting the correct instance is not a trivial task. To make it easier for future users to determine which instance gives the best performance given certain constraints, the cheapest instance types with sufficient memory were run and their relative cost and performance characteristics were compared. Other types of instances could have been examined, such as compute-optimized instances (e.g. i-type instances), memory-optimized instances (e.g. d-type instances) or even accelerator-based instances (e.g. g-type instances). However, due to the prohibitively high costs of these instances, as well as time constraints, only 4 instances were examined: two t-type and two m-type instances (Table 2). These are the most prevalent instance types used for general computing and cluster computing when running Spark/Mapreduce, and hence these were deemed the most relevant to compare.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Table2.png" width="600" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Table2.png" width="600" alt="SERIAL"/>
 
 <p align="center">
   <b>Table 2</b> – Cost-performance analysis of 20 instances processing the model data.
@@ -122,7 +122,7 @@ The optimal choice of instance depends on the most essential criteria for the us
 Here we include results derived from the Python script. Figure 6 shows the difference in anomaly slopes (observations – models) for two example cases. Figure 6(a) shows the model that deviates the least from the observations and Figure 6(b) shows the model that had the greatest deviations. This difference is particularly notable in the Arctic. We see that the observations and CEM1-BCG largely agree, while the observations and immcm4 do not.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig6.png" width="700" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig6.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 6 </b>– Difference in anomaly slopes between observations and (a) CEM1-BCG and (b) inmcm4. 
@@ -131,7 +131,7 @@ Here we include results derived from the Python script. Figure 6 shows the diffe
 Figure 7 shows the PCA on the observations and two models. The model examples shown on this figure are the ones that seemed the most and least similar to the patterns found by the first three principal components (PCs)  on the observation data. The PCs for the observations are on figure 7 (a), the most similar by model are on figure 7(b), and the least similar on figure 7 (c).  
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig7.png" width="800" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig7.png" width="800" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 7</b> – EOF plots for the first three PCAs over the period 1990-2015 for (a) the observations, (b) MIROC-ESM-CHEM and (c) CSIRO-Mk3-6-0.
@@ -156,7 +156,7 @@ It is expected in the coming years and decades that environmental datasets invol
 Rough estimates based on data from this paper reveal that sequential execution time for computation of petabyte- and exabyte- scale datasets would require 2 years and 1500 years respectively. This is clearly not realistic, and requires extensive parallelism to make this computationally tractable. One method proposed to make this more tractable is to continue to use AWS SSM to separate different models, which can then be computed in their own distributed-cluster, such as the StarCluster, a distributed-cluster based on Mpi4py developed by MIT. Within this cluster, anywhere from two to a hundred nodes could be used to aid in this computation, with no communication overhead since this is an embarrassingly parallel problem. Additional parallelism could be implemented within each cluster by using instances which are able to utilize accelerated computing, such as g-type instances running PyAcc. Such an implementation is shown in Figure 8.
 
 <p align="center">
-  <img src="https://github.com/ebonil01/cs205project/blob/master/Images/Fig8.png" width="700" alt="SERIAL"/>
+  <img src="https://github.com/ebonil01/cs205project/blob/master/images/Fig8.png" width="700" alt="SERIAL"/>
   
 <p align="center">
   <b>Figure 8</b> - Software implementation for exascale climate data computation.
