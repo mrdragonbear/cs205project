@@ -13,6 +13,8 @@ Global warming has been one of the hottest topics in environmental science for t
   
   <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
 
+<p>
+
 <p align="justify">
 From Figure 1, it is clear that the models correlate well with observations from 1960 to 2000. However, from 2000 we start to see observational estimates plateau while the model estimates continue to increase. Although this deviation is well known, it is not well understood. The aim of this project is two-fold: (1) to compare temperature estimates from 21 CMIP5 models with observations from NASA GISS (GISSTEMP, 2018) and (2) to create a public framework that can be re-used by researchers to test their climate models for comparison. For the purposes of this class, we will focus more on the latter than the former because that is where the parallel implementation comes into play.
 
