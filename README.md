@@ -8,7 +8,7 @@ Global warming has been one of the hottest topics in environmental science for t
 
 
 <p align="center">
-Figure 1 – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
+  <b>Figure 1</b> – Time series data (1960-2015) of surface temperature anomalies from the Coupled Model Intercomparison Project 5 (CMIP5) (Taylor et al., 2012) simulations and observations.
 
 <p align="justify">
 From Figure 1, it is clear that the models correlate well with observations from 1960 to 2000. However, from 2000 we start to see observational estimates plateau while the model estimates continue to increase. Although this deviation is well known, it is not well understood. The aim of this project is two-fold: (1) to compare temperature estimates from 21 CMIP5 models with observations from NASA GISS (GISSTEMP, 2018) and (2) to create a public framework that can be re-used by researchers to test their climate models for comparison. For the purposes of this class, we will focus more on the latter than the former because that is where the parallel implementation comes into play.
@@ -42,7 +42,7 @@ One of the major challenges that was encountered was reading the NetCDF files in
 For the data analysis, we divided the Python code into six sections. The first loaded the observational data and used a linear regression to compute the slope (in ˚C months-1) for each latitude and longitude over the period 1990-2015. The second and third sections loaded the model data and computed the spatial monthly means and standard deviations, which were used to calculate the model slopes over the period 1990-2015 to be compared with the observations. Section five performed a principal component analysis (PCA) on the model anomalies from 1990-2015. Finally, section six computed the difference in slopes between the observations and models. The Python packages required to run this file are shown in Table 1 below.
 
 <p align="center">
-Table 1 – The essential packages that were installed for the Python code.
+  <b>Table 1</b> – The essential packages that were installed for the Python code.
 
 
 <p align="justify">
@@ -60,7 +60,7 @@ The AMI is essentially a template that allows us to create new instances that ha
 The first step was to create 20 copied instances and have them download different models. To send commands between instances, we needed to configure the AWS Identity and Access Management (IAM) policy, detailed here. The IAM policy provided full read/write access to S3 and full access to SSM; this set of policies was added to each instance after instantiation. Once the models finished downloading on each instance, the NetCDF files were converted to zarr folders and then processed in the Python code detailed above. Results from the code for each model were stored on a public S3 bucket, available from this link. These results can be replicated by accessing the public image through US West (Oregon) using the AMI ID ami-f1334289. The data flow and infrastructure setup is shown graphically in Figure 3.
 
 <p align="center">
-Figure 3 – Illustration of the dataflow and infrastructure setup used in this project.
+  <b>Figure 3</b> – Illustration of the dataflow and infrastructure setup used in this project.
 
 ## 3. Results
 
@@ -70,7 +70,7 @@ Figure 3 – Illustration of the dataflow and infrastructure setup used in this 
 As noted earlier, we changed the files from NetCDF to Zarr to reduce the IOPS in reading and writing data. The speedup from this conversion is negligible on a local machine (from microseconds to milliseconds), but significant on an AWS instance, as seen on Figure 4.
 
 <p align="center">
-Figure 4 – Time to load NetCDF and Zarr files on a local machine (3.1 GHz Intel Core i5 MacBook Pro) and t2.2xlarge AWS instance. Note the logarithmic scale for the y-axis.
+  <b>Figure 4</b> – Time to load NetCDF and Zarr files on a local machine (3.1 GHz Intel Core i5 MacBook Pro) and t2.2xlarge AWS instance. Note the logarithmic scale for the y-axis.
 
 <p align="justify">
 There is a significant reduction in loading time when using Zarr files instead of NetCDF on AWS instances. Zarr files are also 10x smaller in size than NetCDF files, and thus can be loaded into the memory of smaller instances and made them more computationally tractable for smaller instance sizes.
@@ -79,7 +79,7 @@ There is a significant reduction in loading time when using Zarr files instead o
 After converting the NetCDFs to Zarrs, we performed strong and weak scalings based on our Python code. Results are displayed in Figures 5(a) and (b).
 
 <p align="center">
-Figure 5 – Speedup plots of the Dask parallelized sections for (a) strong and (b) weak scalings.
+  <b>Figure 5</b> – Speedup plots of the Dask parallelized sections for (a) strong and (b) weak scalings.
 
 <p align="justify">
 We see that there is little discrepancy between threaded and multiprocessing schedulers on Dask from Figure 5(a). The speedup peaks between 4 and 8 workers, and plateaus after. While sections 1 through 4 are embarrassingly parallel, we do not see a linear speedup, likely because Dask has only recently been developed and still has issues to address (Lu, 2017), i.e. Dask cannot currently parallelize ‘sortby’ functions that are essential for our monthly mean calculations. We also see from Figure 5(b) that there is speedup as we increase the problem size. For weak scaling, linear scaling is achieved if the run time stays constant while the workload is increased in direct proportion to the number of processors. In this project, this was not observed. The slow down observed for smaller numbers of workers is likely due to additional overheads that are present when reindexing the size of the data. Reindexing data to lower resolutions requires more computation per iteration and thus significantly reduces performance when only using one or two worker nodes. Reindexing of this data to determine weak scaling did not provide useful results and was merely performed to see how data would scale for increasingly large datasets. Plateauing occurs at higher numbers of workers due to limitations by sequential portions of the code, present in the ‘sortby’ functions within Dask.
@@ -90,7 +90,7 @@ We see that there is little discrepancy between threaded and multiprocessing sch
 Due to large selection of instances available on AWS, it is important to determine the best instance to utilize for a specific task. For an amateur AWS user, selecting the correct instance is not a trivial task. To make it easier for future users to determine which instance gives the best performance given certain constraints, the cheapest instance types with sufficient memory were run and their relative cost and performance characteristics were compared. Other types of instances could have been examined, such as compute-optimized instances (e.g. i-type instances), memory-optimized instances (e.g. d-type instances) or even accelerator-based instances (e.g. g-type instances). However, due to the prohibitively high costs of these instances, as well as time constraints, only 4 instances were examined: two t-type and two m-type instances (Table 2). These are the most prevalent instance types used for general computing and cluster computing when running Spark/Mapreduce, and hence these were deemed the most relevant to compare.
 
 <p align="center">
-Table 2 – Cost-performance analysis of 20 instances processing the model data.
+  <b>Table 2</b> – Cost-performance analysis of 20 instances processing the model data.
 
 <p align="justify">
 The optimal choice of instance depends on the most essential criteria for the user. For a researcher on a budget constraint, the t2.large instance is clearly the best choice. Contrastingly, if minimal computation time is required then the user should opt for 21 m4.4xlarge. Interestingly, it was determined that running the models on m4.2xlarge instances was both faster and cheaper than on t2.2xlarge instances. However, it should be noted that service limit increases are required for all of these in order to run more than 20 concurrent t-instances or more than 5 m-instances. Instances smaller than t2.large were unable to be used due to insufficient memory requirements.
@@ -101,13 +101,13 @@ The optimal choice of instance depends on the most essential criteria for the us
 Here we include results derived from the Python script. Figure 6 shows the difference in anomaly slopes (observations – models) for two example cases. Figure 6(a) shows the model that deviates the least from the observations and Figure 6(b) shows the model that had the greatest deviations. This difference is particularly notable in the Arctic. We see that the observations and CEM1-BCG largely agree, while the observations and immcm4 do not.
 
 <p align="center">
-Figure 6 – Difference in anomaly slopes between observations and (a) CEM1-BCG and (b) inmcm4. 
+  <b>Figure 6 </b>– Difference in anomaly slopes between observations and (a) CEM1-BCG and (b) inmcm4. 
 
 <p align="justify">
 Figure 7 shows the PCA on the observations and two models. The model examples shown on this figure are the ones that seemed the most and least similar to the patterns found by the first three principal components (PCs)  on the observation data. The PCs for the observations are on figure 7 (a), the most similar by model are on figure 7(b), and the least similar on figure 7 (c).  
 
 <p align="center">
-Figure 7 – EOF plots for the first three PCAs over the period 1990-2015 for (a) the observations, (b) MIROC-ESM-CHEM and (c) CSIRO-Mk3-6-0.
+  <b>Figure 7</b> – EOF plots for the first three PCAs over the period 1990-2015 for (a) the observations, (b) MIROC-ESM-CHEM and (c) CSIRO-Mk3-6-0.
 
 <p align="justify">
 It should be noted that while these results are interesting, they were not the main focus of this project. For simplicity, we have largely replicated the methodology shown in Lin and Huybers, 2016. More rigorous analysis could easily be added to the Python script to provide more rigorous intercomparison between observations and models, and – if necessary – be parallelized with Dask and other forms of parallelism. 
@@ -129,7 +129,7 @@ It is expected in the coming years and decades that environmental datasets invol
 Rough estimates based on data from this paper reveal that sequential execution time for computation of petabyte- and exabyte- scale datasets would require 2 years and 1500 years respectively. This is clearly not realistic, and requires extensive parallelism to make this computationally tractable. One method proposed to make this more tractable is to continue to use AWS SSM to separate different models, which can then be computed in their own distributed-cluster, such as the StarCluster, a distributed-cluster based on Mpi4py developed by MIT. Within this cluster, anywhere from two to a hundred nodes could be used to aid in this computation, with no communication overhead since this is an embarrassingly parallel problem. Additional parallelism could be implemented within each cluster by using instances which are able to utilize accelerated computing, such as g-type instances running PyAcc. Such an implementation is shown in Figure 8.
 
 <p align="center">
-Figure 8 - Software implementation for exascale climate data computation.
+  <b>Figure 8</b> - Software implementation for exascale climate data computation.
 
 <p align="justify">
 Utilizing this infrastructure could reduce execution time of a 1PB dataset to 3 days on 10-node  clusters, and around 8 hours using 100-node clusters. For a 1EB dataset, using 100-node clusters would require 300 days of computation. These execution times are not ideal, but turn this problem from being computationally impossible to becoming far more tractable - no Harvard student in the future will have to wait a thousand years to examine their climate datasets.
